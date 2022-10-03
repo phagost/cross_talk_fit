@@ -1,0 +1,23 @@
+[[Variables]]
+    b1_01:   0 (fixed)
+    b2_01:   10.07142 (fixed)
+    bnz_01:  10.12182 (fixed)
+    tau_1:   3.36535000 +/- 0.04152899 (1.23%) (init = 3.356507)
+    tau_2:   138.908729 +/- 1.33782356 (0.96%) (init = 139.6939)
+    tau_nz:  2.93536605 +/- 0.02138936 (0.73%) (init = 2.931231)
+    c_1:     6.591782e+39 (fixed)
+    c_2:     2.534961e+39 (fixed)
+    c_nz:    1.1012e+39 +/- 9.4318e+36 (0.86%) (init = 1.098159e+39)
+    b1_10:   9.789312 (fixed)
+    b2_10:   0 (fixed)
+    bnz_10:  10.12182 (fixed)
+    b1_11:   10.24181 (fixed)
+    b2_11:   10.38475 (fixed)
+    bnz_11:  10.12182 (fixed)
+    b1_00:   0 (fixed)
+    b2_00:   0 (fixed)
+    bnz_00:  10.12182 (fixed)
+[[Correlations]] (unreported correlations are < 0.100)
+    C(tau_nz, c_nz)  = 0.861
+    C(tau_1, c_nz)   = 0.576
+    C(tau_1, tau_nz) = 0.400

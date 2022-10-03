@@ -452,10 +452,10 @@ if __name__ == '__main__':
     
     config = {
         'h2o_add': 10,      # ul per 100 ul sample
-        'conc_tempol': 60,  # mM
+        'conc_tempol': 70,  # mM
         
         # Set is_dt True if TEMPOL is deuterated
-        'is_dt': False,
+        'is_dt': True,
         
         # Set if only H11 and H01 data should be fitted
         # (as if one wouldn't have D data)
@@ -472,24 +472,24 @@ if __name__ == '__main__':
     
     fitter = FitterHD(config)
 
-    params_config = {
-        'tau_1' : 100,
-        'tau_2' : 100,
-        'tau_nz': 100
-    }
+    # params_config = {
+    #     'tau_1' : 100,
+    #     'tau_2' : 100,
+    #     'tau_nz': 100
+    # }
     
-    fitter.set_param_values(params_config)
+    # fitter.set_param_values(params_config)
     
     fitter.make_fit(show_plot=True,
                 save_plot=True,
                 print_report=True,
-                save_report=False,
+                save_report=True,
                 sample_rate=1)
 
-    # fitter.emcee(steps=1000,
-    #             progress=True,
-    #             plot=True,
-    #             save_plot=False,
-    #             report=True,
-    #             save_report=False)
+    fitter.emcee(steps=1000,
+                progress=True,
+                plot=True,
+                save_plot=False,
+                report=True,
+                save_report=True)
     
