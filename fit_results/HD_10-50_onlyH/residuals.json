@@ -1,0 +1,12 @@
+{
+    "H": {
+        "points": 800,
+        "residuals": 10933,
+        "point_H_only": 400,
+        "residuals_H_only": 3372
+    },
+    "D": {
+        "points": 248,
+        "residuals": 6110
+    }
+}

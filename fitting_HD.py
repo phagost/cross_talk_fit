@@ -228,9 +228,6 @@ class FitterHD:
         
         if self.config['is_dt']:
             exp_name = exp_name + '_dt'
-        
-        if self.config["only_H"]:
-            exp_name = exp_name + '_onlyH'
             
         return exp_name
     
@@ -242,7 +239,9 @@ class FitterHD:
             str: the final pathname where all results will be stored 
         """
         start_dir = os.getcwd()
-        finpath = os.path.join(start_dir, 'fit_results', self.exp_name)
+        
+        expname = (self.exp_name + '_onlyH') if self.config['only_H'] else self.exp_name
+        finpath = os.path.join(start_dir, 'fit_results', expname)
         
         if not os.path.isdir(finpath):
             os.mkdir(finpath)
@@ -381,7 +380,7 @@ class FitterHD:
             
         # Save plot if requested    
         if save_plot:
-            filepath = os.path.join(self.finpath, 'fit_plot')
+            filepath = os.path.join(self.finpath, 'fit_plot.pdf')
             
             # check if the plot is already exist
             # if yes, it should be deleted
@@ -435,13 +434,16 @@ class FitterHD:
             fig = corner.corner(res.flatchain, 
                         labels=res.var_names,
                         show_titles=False,
-                        truths=fit_vals)
+                        truths=fit_vals,
+                        use_math_text=True)
+            
+            fig.set_tight_layout(True)
             
         if plot:
             plt.show()
             
         if save_plot:    
-            filepath = os.path.join(self.finpath, 'emcee_plot')
+            filepath = os.path.join(self.finpath, 'emcee_plot.pdf')
             
             if os.path.isfile(filepath):
                 os.remove(filepath)
@@ -452,14 +454,14 @@ if __name__ == '__main__':
     
     config = {
         'h2o_add': 10,      # ul per 100 ul sample
-        'conc_tempol': 70,  # mM
+        'conc_tempol': 60,  # mM
         
         # Set is_dt True if TEMPOL is deuterated
-        'is_dt': True,
+        'is_dt': False,
         
         # Set if only H11 and H01 data should be fitted
         # (as if one wouldn't have D data)
-        'only_H': False,
+        'only_H': True,
         
         # Set True to account for the errors
         'with_errors': True,
@@ -471,25 +473,17 @@ if __name__ == '__main__':
     }
     
     fitter = FitterHD(config)
-
-    # params_config = {
-    #     'tau_1' : 100,
-    #     'tau_2' : 100,
-    #     'tau_nz': 100
-    # }
     
-    # fitter.set_param_values(params_config)
-    
-    fitter.make_fit(show_plot=True,
+    fitter.make_fit(show_plot=False,
                 save_plot=True,
-                print_report=True,
+                print_report=False,
                 save_report=True,
                 sample_rate=1)
 
     fitter.emcee(steps=1000,
                 progress=True,
-                plot=True,
-                save_plot=False,
-                report=True,
+                plot=False,
+                save_plot=True,
+                report=False,
                 save_report=True)
     
