@@ -3,7 +3,7 @@ Progam to fit the generated noisy data for Solomon equations with
 the different time sampling intervals
 '''
 
-from models import model_3res
+from models import model_3res_2f
 
 from data import read_data
 from capacity import calc_capacity_zeeman_H,\
@@ -30,7 +30,7 @@ def solution(time, M, params):
     """
     abserr = 1.0e-8
     relerr = 1.0e-6
-    sol = odeint(model_3res, M, time, args=(params,),
+    sol = odeint(model_3res_2f, M, time, args=(params,),
               atol=abserr, rtol=relerr)
     return sol
 
@@ -298,8 +298,13 @@ class FitterHD:
                 c_2 = calc_capacity_zeeman_D(self.composition['d2o'])
             params.add('c_2', c_2, vary=False)
             
-            c_nz = calc_capacity_nz(self.composition['TEMPOL'])
-            params.add('c_nz', c_nz, min=c_nz * 1e-2, max = c_nz * 1e+3, vary=True)
+            # c_nz = calc_capacity_nz(self.composition['TEMPOL'])
+            # params.add('c_nz', c_nz, min=c_nz * 1e-2, max = c_nz * 1e+3, vary=True)
+            
+            f1 = 0.1
+            params.add('f1', f1, min=0.01, max=0.99, vary=True)
+            f2 = 0.1
+            params.add('f2', f2, min=0.01, max=0.99, vary=True)
             
     def set_param_values(self, params_config):
         for param_key, param_val in params_config.items():
@@ -453,15 +458,15 @@ class FitterHD:
 if __name__ == '__main__':
     
     config = {
-        'h2o_add': 10,      # ul per 100 ul sample
+        'h2o_add': 25,      # ul per 100 ul sample
         'conc_tempol': 60,  # mM
         
         # Set is_dt True if TEMPOL is deuterated
-        'is_dt': False,
+        'is_dt': True,
         
         # Set if only H11 and H01 data should be fitted
         # (as if one wouldn't have D data)
-        'only_H': True,
+        'only_H': False,
         
         # Set True to account for the errors
         'with_errors': True,
@@ -474,16 +479,16 @@ if __name__ == '__main__':
     
     fitter = FitterHD(config)
     
-    fitter.make_fit(show_plot=False,
-                save_plot=True,
-                print_report=False,
-                save_report=True,
+    fitter.make_fit(show_plot=True,
+                save_plot=False,
+                print_report=True,
+                save_report=False,
                 sample_rate=1)
 
-    fitter.emcee(steps=1000,
-                progress=True,
-                plot=False,
-                save_plot=True,
-                report=False,
-                save_report=True)
+    # fitter.emcee(steps=1000,
+    #             progress=True,
+    #             plot=False,
+    #             save_plot=True,
+    #             report=False,
+    #             save_report=True)
     
