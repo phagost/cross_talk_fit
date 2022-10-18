@@ -1,0 +1,39 @@
+[[Fit Statistics]]
+    # fitting method   = differential_evolution
+    # function evals   = 4107
+    # data points      = 1048
+    # variables        = 5
+    chi-square         = 11.7274338
+    reduced chi-square = 0.01124394
+    Akaike info crit   = -4698.35798
+    Bayesian info crit = -4673.58479
+[[Variables]]
+    b1_01:   0 (fixed)
+    b2_01:   14.36422 (fixed)
+    bnz_01:  14.98682 (fixed)
+    tau_1:   7.41431666 +/- 0.03169412 (0.43%) (init = 12)
+    tau_2:   238.863335 +/- 1.48728951 (0.62%) (init = 380)
+    tau_nz:  5.87943833 +/- 0.02453870 (0.42%) (init = 7)
+    c_1:     1.447902e+40 (fixed)
+    c_2:     2.18596e+39 (fixed)
+    f1:      0.09191691 +/- 4.4655e-04 (0.49%) (init = 0.1)
+    f2:      0.01084388 +/- 2.3036e-04 (2.12%) (init = 0.1)
+    b1_11:   16.37838 (fixed)
+    b2_11:   14.85466 (fixed)
+    bnz_11:  14.98682 (fixed)
+    b1_10:   14.35002 (fixed)
+    b2_10:   0 (fixed)
+    bnz_10:  14.98682 (fixed)
+    b1_00:   0 (fixed)
+    b2_00:   0 (fixed)
+    bnz_00:  14.98682 (fixed)
+[[Correlations]] (unreported correlations are < 0.100)
+    C(tau_1, f2)     = 1.479
+    C(tau_nz, f2)    = -0.699
+    C(tau_1, tau_2)  = -0.582
+    C(tau_1, f1)     = 0.572
+    C(f1, f2)        = -0.457
+    C(tau_nz, f1)    = 0.416
+    C(tau_2, f2)     = -0.399
+    C(tau_2, tau_nz) = 0.197
+    C(tau_2, f1)     = 0.171

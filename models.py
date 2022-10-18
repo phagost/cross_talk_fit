@@ -14,7 +14,7 @@ import numpy as np
 #     else:
         
 
-def model_3res(b, t, params):
+def m_3res(b, t, params):
     """
     Defines the differential equations for the 2 coupled 
     zeeman reservoirs
@@ -55,7 +55,7 @@ def model_3res(b, t, params):
     ))
     return db_dt
 
-def model_3res_dc(b, t, params):
+def m_3res_dc(b, t, params):
     """
     Defines the differential equations for the 2 coupled 
     zeeman reservoirs
@@ -101,7 +101,7 @@ def model_3res_dc(b, t, params):
     return db_dt
 
 
-def model_3res_f(b, t, params):
+def m_3res_f(b, t, params):
     """
     Defines the differential equations for the 2 coupled 
     zeeman reservoirs
@@ -124,8 +124,7 @@ def model_3res_f(b, t, params):
     k_nz = 1 / params['tau_nz']
     c_1 = params['c_1']
     c_2 = params['c_2']
-    # c_nz = params['c_nz']
-    f = params['f']
+    f = params['f1']
     
     c_1 = c_1 * (1 - f)
     c_nz = f * c_1
@@ -146,7 +145,7 @@ def model_3res_f(b, t, params):
     ))
     return db_dt
 
-def model_3res_2f(b, t, params):
+def m_3res_2f(b, t, params):
     """
     Defines the differential equations for the 2 coupled 
     zeeman reservoirs
@@ -193,7 +192,7 @@ def model_3res_2f(b, t, params):
     ))
     return db_dt
 
-def model_3res_f_cnz(b, t, params):
+def m_3res_f_cnz(b, t, params):
     """
     Defines the differential equations for the 2 coupled 
     zeeman reservoirs
@@ -217,7 +216,7 @@ def model_3res_f_cnz(b, t, params):
     c_1 = params['c_1']
     c_2 = params['c_2']
     c_nz = params['c_nz']
-    f = params['f']
+    f = params['f1']
     
     c_1 = c_1 * (1 - f)
     c_nz = c_nz + f * c_1
@@ -238,7 +237,105 @@ def model_3res_f_cnz(b, t, params):
     ))
     return db_dt
 
-def model_3res_2hid_nocnz(b, t, params):
+
+def m_4res_f_cnz(b, t, params):
+    """
+    Defines the differential equations for the 2 coupled 
+    zeeman reservoirs
+
+    Arguments:
+        b :  vector of the state variables:
+                  b = [b_1, b_2, b_nz]
+        t :  time
+        params :  vector of the parameters:
+                  params = [tau_1, tau_2, tau_nz,
+                            c_1, c_2, c_nz]
+    """
+    
+    # Set initial conditions
+    b_1, b_2, b_nz, b_1_hb = b
+    
+    # Set initial values
+    k_1 = 1 / params['tau_1']
+    k_1_hb = 1 / params['tau_1_hb']
+    k_2 = 1 / params['tau_2']
+    k_nz = 1 / params['tau_nz']
+    c_1 = params['c_1']
+    c_2 = params['c_2']
+    c_nz = params['c_nz']
+    f = params['f1']
+    
+    c_1_hb = c_1 * f
+    c_1 = c_1 * (1 - f)
+    
+    # Setting the fraction of hidden spins
+    # if f = 0, the model is idential to two spin reservoir model
+    
+    # The invese temperature of the reservoir
+    b_lab = 1 / 4.09 
+    
+    # Create db_dt = (b_1', b_2', b_nz'):
+    db_dt = np.array((
+        - k_1_hb * (b_1-b_1_hb),      # db_1dt for the first zeeman reservoir
+        - k_2 * (b_2-b_nz),      # db_2dt for the second zeeman reservoir
+        - (c_1_hb/c_nz) * k_1 * (b_nz - b_1_hb) 
+        - (c_2/c_nz) * k_2 * (b_nz - b_2)
+        - k_nz * (b_nz-b_lab),  # db_nzdt for non-zeeman reservoir
+        - k_1_hb *(c_1 / c_1_hb) * (b_1_hb-b_1) - k_1 * (b_1_hb-b_nz),  # db_1dt H bulk hidden
+    ))
+    return db_dt
+
+
+def m_4res_2f(b, t, params):
+    """
+    Defines the differential equations for the 2 coupled 
+    zeeman reservoirs
+
+    Arguments:
+        b :  vector of the state variables:
+                  b = [b_1, b_2, b_nz]
+        t :  time
+        params :  vector of the parameters:
+                  params = [tau_1, tau_2, tau_nz,
+                            c_1, c_2, c_nz]
+    """
+    
+    # Set initial conditions
+    b_1, b_2, b_nz, b_1_hb = b
+    
+    # Set initial values
+    k_1 = 1 / params['tau_1']
+    k_1_hb = 1 / params['tau_1_hb']
+    k_2 = 1 / params['tau_2']
+    k_nz = 1 / params['tau_nz']
+    c_1 = params['c_1']
+    c_2 = params['c_2']
+    # c_nz = params['c_nz']
+    f1 = params['f1']
+    f2 = params['f2']
+    
+    c_1_hb = c_1 * f1
+    c_nz = f2 * c_2
+    c_1 = c_1 * (1 - f1 - f2)
+    
+    # Setting the fraction of hidden spins
+    # if f = 0, the model is idential to two spin reservoir model
+    
+    # The invese temperature of the reservoir
+    b_lab = 1 / 4.09 
+    
+    # Create db_dt = (b_1', b_2', b_nz'):
+    db_dt = np.array((
+        - k_1_hb * (b_1-b_1_hb),      # db_1dt for the first zeeman reservoir
+        - k_2 * (b_2-b_nz),      # db_2dt for the second zeeman reservoir
+        - (c_1_hb/c_nz) * k_1 * (b_nz - b_1_hb) 
+        - (c_2/c_nz) * k_2 * (b_nz - b_2)
+        - k_nz * (b_nz-b_lab),  # db_nzdt for non-zeeman reservoir
+        - k_1_hb *(c_1 / c_1_hb) * (b_1_hb-b_1) - k_1 * (b_1_hb-b_nz),  # db_1dt H bulk hidden
+    ))
+    return db_dt
+
+def ml_3res_2hid_nocnz(b, t, params):
     """
     Defines the differential equations for the 2 coupled 
     zeeman reservoirs
@@ -288,7 +385,7 @@ def model_3res_2hid_nocnz(b, t, params):
     ))
     return db_dt
 
-def model_3res_d(b, t, params):
+def m_3res_d(b, t, params):
     """
     Defines the differential equations for the 2 coupled 
     zeeman reservoirs
@@ -329,7 +426,7 @@ def model_3res_d(b, t, params):
     ))
     return db_dt
 
-def model_3res_1hid(b, t, params):
+def m_3res_1hid(b, t, params):
     """
     Defines the differential equations for the 2 coupled 
     zeeman reservoirs
@@ -377,7 +474,7 @@ def model_3res_1hid(b, t, params):
     ))
     return db_dt
 
-def model_3res_2hid(b, t, params):
+def m_3res_2hid(b, t, params):
     """
     Defines the differential equations for the 2 coupled 
     zeeman reservoirs
@@ -430,7 +527,7 @@ def model_3res_2hid(b, t, params):
     ))
     return db_dt
 
-def model_4res(b, t, params):
+def m_4res(b, t, params):
     """
     Defines the differential equations for the 2 coupled 
     zeeman reservoirs
@@ -473,7 +570,7 @@ def model_4res(b, t, params):
     ))
     return db_dt
 
-def model_4res_1hid(b, t, params):
+def m_4res_1hid(b, t, params):
     """
     Defines the differential equations for the 2 coupled 
     zeeman reservoirs
@@ -564,11 +661,11 @@ if __name__ == '__main__':
         
         # Plotting 01 results
         ini_01 = [params['b1_01'], params['b2_01'], params['bss_01']]
-        sol_01 = odeint(model_3res, ini_01, time, args=(params,))
+        sol_01 = odeint(m_3res, ini_01, time, args=(params,))
         
         # Plotting 10 results
         ini_10 = [params['b1_10'], params['b2_10'], params['bss_10']]
-        sol_10 = odeint(model_3res, ini_10, time, args=(params,))
+        sol_10 = odeint(m_3res, ini_10, time, args=(params,))
 
 
         fig, ax = plt.subplots(1, 2)
