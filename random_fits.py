@@ -117,7 +117,7 @@ def save_results(res, config):
     exp_name = make_name(config)
     
     start_dir = os.getcwd()
-    dir_name = os.path.join(start_dir, 'models', GLOBAL_CONFIG["model"], exp_name)
+    dir_name = os.path.join(start_dir, 'random_fit_results', GLOBAL_CONFIG["model"], exp_name)
     if not os.path.isdir(dir_name):
             # os.mkdir(dir_name)
             os.makedirs(dir_name, exist_ok=True)
@@ -132,9 +132,6 @@ def save_results(res, config):
     np.savetxt(os.path.join(dir_name, "means"), means, delimiter=',')
     np.savetxt(os.path.join(dir_name, "stds"), stds, delimiter=',')
     np.savetxt(os.path.join(dir_name, "data"), np_sorted, delimiter=',')
-    
-    # print(np_sorted[:, :-1].shape)
-    # print(len(GLOBAL_CONFIG["param_names"]))
 
     fig = corner.corner(np_sorted[:, :-1], 
         labels=PARAM_NAMES[GLOBAL_CONFIG["model"]]

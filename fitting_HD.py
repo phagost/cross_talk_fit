@@ -47,8 +47,6 @@ def plot_exp(data, data_fitted,
     
     ax_current = ax[first][sec]
     
-    # Make and a
-    
     # H
     ax_current.plot(data[f'H{exp}']['time'], data_fitted[f'H{exp}'], color=color_H, linewidth=5, alpha=0.3, label='H fit', zorder=2)
     ax_current.scatter(data[f'H{exp}']['time'], data[f'H{exp}']['data'], marker='o', facecolor='none', 

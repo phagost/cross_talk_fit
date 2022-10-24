@@ -32,7 +32,14 @@ There are two types of python files : main python fitters and helpers with diffe
 * tqdm
 
 ### Main fitters
-`fitting_HD.py` and `fitting_P` for fitting HD and P data, respectively. The example of thier usage is shown in the `fitting_example.ipynb` notebook.
+
+`fitting_HD.py` and `fitting_P` for fitting HD and P data, respectively. The example of thier usage is shown in the `fitting_example.ipynb` notebook. Additionally, the `random_fits.py` contains the script for consicutive fits with the random initial conditions
+
+The data from these scripts are contained in:
+
+* `fit_results` directory for fitting routine
+* `random_fit_results` for `random_fits` routine
+
 ### Helpers
 
 * `capacity.py` - calculated heat capacity from sample composition
