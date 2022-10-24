@@ -29,9 +29,9 @@ MODELS_4_RES = (
 )
                          
 def make_exp_name(exp: str) -> str:
-    first = 'max' if exp[0] == '1' else '0'
-    sec = 'max' if exp[1] == '1' else '0'
-    return f'H$_{{{first}}}$|D$_{{{sec}}}$'
+    first = 'm' if exp[0] == '1' else '0'
+    sec = 'm' if exp[1] == '1' else '0'
+    return f'H$_{{{first}}}$D$_{{{sec}}}$'
 
 def plot_exp(data, data_fitted, 
              exp: 'str',  ax,  errors: bool=True, config=None):
@@ -68,7 +68,7 @@ def plot_exp(data, data_fitted,
     if exp in ('01', '00'):
         ax_current.set_xlabel('time / sec')
     if exp in ('11', '01'):
-        ax_current.set_ylabel(r'T$^{-1}$ / K$^{-1}$')
+        ax_current.set_ylabel(r'$\beta$ / K$^{-1}$')
         
     if exp in ("01", "00", "10"):
         axins = ax_current.inset_axes([0.4, 0.4, 0.57, 0.57])
@@ -113,7 +113,15 @@ def plot_exp(data, data_fitted,
         # axins.set_yticklabels([])
         
         ax_current.indicate_inset_zoom(axins, edgecolor="black")
-        
+    
+    
+    # Rewrite x ticks
+    start, end = ax_current.get_xlim()
+    ax_current.xaxis.set_ticks(np.arange(0, end, 300))
+    
+    # Set xlims
+    ax_current.set_xlim(-50, 1000)
+    
     ax_current.title.set_text(make_exp_name(exp))
     if exp in ("11",):
         ax_current.legend()
@@ -441,7 +449,12 @@ class FitterHD:
         return data_fitted 
 
     def make_fig(self):
-        fig, ax = plt.subplots(2, 2)
+        plt.rc('font', family='Helvetica')
+        cm = 1/2.54  # cm in inches
+        size = 17.1   # in cm
+        ver_scale = 0.8
+        fig, ax = plt.subplots(2, 2, figsize=(size*cm, ver_scale*size*cm),sharey=True, constrained_layout=True, 
+                               gridspec_kw = {'wspace':0})
             
         for exp in self.exps:
             plot_exp(self.data, self.data_fitted,
@@ -489,14 +502,19 @@ class FitterHD:
             
         # Save plot if requested    
         if save_plot:
-            filepath = os.path.join(self.finpath, 'fit_plot.pdf')
+            filepath_pdf = os.path.join(self.finpath, 'fit_plot.pdf')
+            filepath_png = os.path.join(self.finpath, 'fit_plot.png')
             
             # check if the plot is already exist
             # if yes, it should be deleted
-            if os.path.isfile(filepath):
-                os.remove(filepath)
+            if os.path.isfile(filepath_pdf):
+                os.remove(filepath_pdf)
             
-            self.fig.savefig(filepath, bbox_inches='tight')
+            if os.path.isfile(filepath_png):
+                os.remove(filepath_png)
+            
+            self.fig.savefig(filepath_pdf, bbox_inches='tight')
+            self.fig.savefig(filepath_png, bbox_inches='tight')
         
         # Show plot if requested        
         if show_plot:
@@ -558,21 +576,26 @@ class FitterHD:
             self.show_plot()
             
         if save_plot:    
-            filepath = os.path.join(self.finpath, 'emcee_plot.pdf')
+            filepath_pdf = os.path.join(self.finpath, 'emcee_plot.pdf')
+            filepath_png = os.path.join(self.finpath, 'emcee_plot.png')
             
-            if os.path.isfile(filepath):
-                os.remove(filepath)
+            if os.path.isfile(filepath_pdf):
+                os.remove(filepath_pdf)
             
-            fig.savefig(filepath, bbox_inches='tight')
+            if os.path.isfile(filepath_png):
+                os.remove(filepath_png)
+            
+            fig.savefig(filepath_pdf, bbox_inches='tight')
+            fig.savefig(filepath_png, bbox_inches='tight')
 
 if __name__ == '__main__':
     
     config = {
-        'h2o_add': 25,     # ul per 100 ul sample
+        'h2o_add': 10,     # ul per 100 ul sample
         'conc_tempol': 60,  # mM
         
         # Set is_dt True if TEMPOL is deuterated
-        'is_dt': False,
+        'is_dt': True,
         
         # Set if only H11 and H01 data should be fitted
         # (as if one wouldn't have D data)
@@ -583,7 +606,7 @@ if __name__ == '__main__':
         
         # Set the model method
         # All model names start with m_
-        "model": "m_3res",
+        "model": "m_3res_f",
 
         # SET FIT METHOD
         # 'leastsq' for a local fit
@@ -602,10 +625,10 @@ if __name__ == '__main__':
     #     }
     # )
     
-    fitter.make_fit(show_plot=True,
-                save_plot=False,
+    fitter.make_fit(show_plot=False,
+                save_plot=True,
                 print_report=True,
-                save_report=False,
+                save_report=True,
                 sample_rate=1)
 
     # fitter.emcee(steps=1000,

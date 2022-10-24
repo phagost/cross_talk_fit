@@ -1,44 +1,6 @@
 {
     "unique_symbols": {
-        "b1_10": 14.3500203202005,
-        "b2_00": 0,
-        "b1_01": 0,
-        "infty": Infinity,
-        "b1_11": 16.3783849669612,
-        "bnz_01": 14.98682032213195,
-        "wofz": {
-            "__class__": "Callable",
-            "__name__": "wofz",
-            "pyversion": "3.10",
-            "value": null,
-            "importer": "scipy.special._ufuncs"
-        },
-        "tau_1": 2.3545260803338466,
-        "little_endian": 1,
-        "f1": 0.07906077717974622,
-        "b2_10": 0,
-        "bnz_00": 14.98682032213195,
-        "None": null,
-        "c_1": 1.447902371581592e+40,
-        "b2_01": 14.364219978426,
-        "nan": NaN,
-        "tau_nz": 5.479763214841621,
         "bnz_10": 14.98682032213195,
-        "bnz_11": 14.98682032213195,
-        "e": 2.718281828459045,
-        "c_2": 2.1859602151454304e+39,
-        "Inf": Infinity,
-        "erfc": {
-            "__class__": "Callable",
-            "__name__": "erfc",
-            "pyversion": "3.10",
-            "value": null,
-            "importer": "scipy.special._ufuncs"
-        },
-        "newaxis": null,
-        "pi": 3.141592653589793,
-        "False": 0,
-        "tau_2": 266.8243534610883,
         "gamfcn": {
             "__class__": "Callable",
             "__name__": "gamma",
@@ -46,9 +8,45 @@
             "value": null,
             "importer": "scipy.special._ufuncs"
         },
-        "b1_00": 0,
+        "None": null,
+        "tau_1": 2.3609593279267016,
+        "bnz_11": 14.98682032213195,
+        "wofz": {
+            "__class__": "Callable",
+            "__name__": "wofz",
+            "pyversion": "3.10",
+            "value": null,
+            "importer": "scipy.special._ufuncs"
+        },
+        "b1_11": 16.3783849669612,
+        "infty": Infinity,
+        "inf": Infinity,
+        "tau_nz": 5.4827960642420495,
+        "erfc": {
+            "__class__": "Callable",
+            "__name__": "erfc",
+            "pyversion": "3.10",
+            "value": null,
+            "importer": "scipy.special._ufuncs"
+        },
         "b2_11": 14.8546560229401,
+        "newaxis": null,
+        "b2_00": 0,
+        "b1_10": 14.3500203202005,
+        "bnz_01": 14.98682032213195,
+        "pi": 3.141592653589793,
+        "tau_2": 265.2661923550662,
+        "c_1": 1.447902371581592e+40,
+        "bnz_00": 14.98682032213195,
+        "c_2": 2.1859602151454304e+39,
+        "False": 0,
+        "Inf": Infinity,
+        "f1": 0.07921016416951071,
+        "nan": NaN,
+        "little_endian": 1,
         "True": 1,
+        "NAN": NaN,
+        "b1_01": 0,
         "erf": {
             "__class__": "Callable",
             "__name__": "erf",
@@ -56,25 +54,14 @@
             "value": null,
             "importer": "scipy.special._ufuncs"
         },
-        "NAN": NaN,
-        "inf": Infinity
+        "b1_00": 0,
+        "b2_10": 0,
+        "b2_01": 14.364219978426,
+        "e": 2.718281828459045
     },
     "params": [
         [
-            "b1_10",
-            14.3500203202005,
-            false,
-            null,
-            -Infinity,
-            Infinity,
-            null,
-            0,
-            null,
-            14.3500203202005,
-            null
-        ],
-        [
-            "b2_10",
+            "b1_00",
             0,
             false,
             null,
@@ -87,7 +74,20 @@
             null
         ],
         [
-            "bnz_10",
+            "b2_00",
+            0,
+            false,
+            null,
+            -Infinity,
+            Infinity,
+            null,
+            0,
+            null,
+            0,
+            null
+        ],
+        [
+            "bnz_00",
             14.98682032213195,
             false,
             null,
@@ -101,51 +101,51 @@
         ],
         [
             "tau_1",
-            2.3545260803338466,
+            2.3609593279267016,
             true,
             null,
             0.1,
             100,
             null,
-            NaN,
+            0.05102808484180844,
             {
-                "tau_2": NaN,
-                "tau_nz": NaN,
-                "f1": NaN
+                "tau_2": 0.44063172187469396,
+                "tau_nz": -0.22653284201582713,
+                "f1": -0.4031658641952845
             },
             12,
             null
         ],
         [
             "tau_2",
-            266.8243534610883,
+            265.2661923550662,
             true,
             null,
             50,
             600,
             null,
-            NaN,
+            1.2461804524400037,
             {
-                "tau_1": NaN,
-                "tau_nz": NaN,
-                "f1": NaN
+                "tau_1": 0.44063172187469396,
+                "tau_nz": -0.42868801604582435,
+                "f1": -0.5391731831854135
             },
             380,
             null
         ],
         [
             "tau_nz",
-            5.479763214841621,
+            5.4827960642420495,
             true,
             null,
             0.5,
             40.0,
             null,
-            NaN,
+            0.026566221359405586,
             {
-                "tau_1": NaN,
-                "tau_2": NaN,
-                "f1": NaN
+                "tau_1": -0.22653284201582713,
+                "tau_2": -0.42868801604582435,
+                "f1": 0.6421267734123871
             },
             7,
             null
@@ -178,58 +178,19 @@
         ],
         [
             "f1",
-            0.07906077717974622,
+            0.07921016416951071,
             true,
             null,
             0.01,
             0.4,
             null,
-            0.00013694466367783468,
+            0.0003883159711987867,
             {
-                "tau_1": NaN,
-                "tau_2": NaN,
-                "tau_nz": NaN
+                "tau_1": -0.4031658641952845,
+                "tau_2": -0.5391731831854135,
+                "tau_nz": 0.6421267734123871
             },
             0.1,
-            null
-        ],
-        [
-            "b1_01",
-            0,
-            false,
-            null,
-            -Infinity,
-            Infinity,
-            null,
-            0,
-            null,
-            0,
-            null
-        ],
-        [
-            "b2_01",
-            14.364219978426,
-            false,
-            null,
-            -Infinity,
-            Infinity,
-            null,
-            0,
-            null,
-            14.364219978426,
-            null
-        ],
-        [
-            "bnz_01",
-            14.98682032213195,
-            false,
-            null,
-            -Infinity,
-            Infinity,
-            null,
-            0,
-            null,
-            14.98682032213195,
             null
         ],
         [
@@ -272,7 +233,7 @@
             null
         ],
         [
-            "b1_00",
+            "b1_01",
             0,
             false,
             null,
@@ -285,7 +246,46 @@
             null
         ],
         [
-            "b2_00",
+            "b2_01",
+            14.364219978426,
+            false,
+            null,
+            -Infinity,
+            Infinity,
+            null,
+            0,
+            null,
+            14.364219978426,
+            null
+        ],
+        [
+            "bnz_01",
+            14.98682032213195,
+            false,
+            null,
+            -Infinity,
+            Infinity,
+            null,
+            0,
+            null,
+            14.98682032213195,
+            null
+        ],
+        [
+            "b1_10",
+            14.3500203202005,
+            false,
+            null,
+            -Infinity,
+            Infinity,
+            null,
+            0,
+            null,
+            14.3500203202005,
+            null
+        ],
+        [
+            "b2_10",
             0,
             false,
             null,
@@ -298,7 +298,7 @@
             null
         ],
         [
-            "bnz_00",
+            "bnz_10",
             14.98682032213195,
             false,
             null,

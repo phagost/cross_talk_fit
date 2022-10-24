@@ -1,33 +1,29 @@
 [[Fit Statistics]]
     # fitting method   = differential_evolution
-    # function evals   = 1620
+    # function evals   = 2645
     # data points      = 1048
     # variables        = 4
-    chi-square         = 19451.0292
-    reduced chi-square = 18.6312540
-    Akaike info crit   = 3069.22518
-    Bayesian info crit = 3089.04374
+    chi-square         = 19463.9349
+    reduced chi-square = 18.6436158
+    Akaike info crit   = 3069.92030
+    Bayesian info crit = 3089.73885
 ##  Warning: uncertainties could not be estimated:
 [[Variables]]
-    b1_10:   18.18584 (fixed)
-    b2_10:   0 (fixed)
-    bnz_10:  19.30518 (fixed)
-    tau_1:   51.2310535 +/-        nan (nan%) (init = 12)
-    tau_2:   232.811826 +/- 2.49425690 (1.07%) (init = 380)
-    tau_nz:  4.61436141 +/- 0.05229331 (1.13%) (init = 7)
-    c_1:     5.89528e+39 (fixed)
-    c_2:     2.567786e+39 (fixed)
-    f1:      0.14490630 +/- 0.00213839 (1.48%) (init = 0.1)
     b1_01:   0 (fixed)
     b2_01:   19.81654 (fixed)
     bnz_01:  19.30518 (fixed)
+    tau_1:   51.5408914 +/-        nan (nan%) (init = 12)
+    tau_2:   232.322962 +/-        nan (nan%) (init = 380)
+    tau_nz:  4.69395907 +/- 0.02773066 (0.59%) (init = 7)
+    c_1:     5.89528e+39 (fixed)
+    c_2:     2.567786e+39 (fixed)
+    f1:      0.14561717 +/-        nan (nan%) (init = 0.1)
     b1_11:   18.56344 (fixed)
     b2_11:   20.65491 (fixed)
     bnz_11:  19.30518 (fixed)
     b1_00:   0 (fixed)
     b2_00:   0 (fixed)
     bnz_00:  19.30518 (fixed)
-[[Correlations]] (unreported correlations are < 0.100)
-    C(tau_nz, f1)    = 0.675
-    C(tau_2, tau_nz) = 0.610
-    C(tau_2, f1)     = -0.609
+    b1_10:   18.18584 (fixed)
+    b2_10:   0 (fixed)
+    bnz_10:  19.30518 (fixed)
