@@ -1,28 +1,28 @@
 [[Fit Statistics]]
     # fitting method   = differential_evolution
-    # function evals   = 5987
+    # function evals   = 5634
     # data points      = 1048
     # variables        = 6
-    chi-square         = 3546.63174
-    reduced chi-square = 3.40367730
-    Akaike info crit   = 1289.63227
-    Bayesian info crit = 1319.36010
+    chi-square         = 3477.71941
+    reduced chi-square = 3.33754262
+    Akaike info crit   = 1269.06882
+    Bayesian info crit = 1298.79666
 ##  Warning: uncertainties could not be estimated:
 [[Variables]]
-    b1_01:     0 (fixed)
-    b2_01:     11.90543 (fixed)
-    bnz_01:    11.83364 (fixed)
-    tau_1:     0.88217657 +/-        nan (nan%) (init = 12)
-    tau_2:     134.357630 +/- 1.17951650 (0.88%) (init = 380)
-    tau_nz:    1.03395668 +/-        nan (nan%) (init = 7)
-    c_1:       5.89528e+39 (fixed)
-    c_2:       2.578727e+39 (fixed)
-    f1:        0.03391651 +/-        nan (nan%) (init = 0.1)
-    f2:        0.13730674 +/-        nan (nan%) (init = 0.1)
-    tau_1_hb:  3.73203176 +/- 0.07170069 (1.92%) (init = 0.1)
     b1_10:     11.13903 (fixed)
     b2_10:     0 (fixed)
     bnz_10:    11.83364 (fixed)
+    tau_1:     0.82831415 +/- 0.01336425 (1.61%) (init = 12)
+    tau_2:     134.664274 +/-        nan (nan%) (init = 380)
+    tau_nz:    1.09527379 +/- 0.00807942 (0.74%) (init = 7)
+    c_1:       5.89528e+39 (fixed)
+    c_2:       2.578727e+39 (fixed)
+    f1:        0.03577125 +/- 1.2015e-04 (0.34%) (init = 0.1)
+    f2:        0.06547102 +/- 1.5779e-04 (0.24%) (init = 0.1)
+    tau_1_hb:  3.69701182 +/-        nan (nan%) (init = 0.1)
+    b1_01:     0 (fixed)
+    b2_01:     11.90543 (fixed)
+    bnz_01:    11.83364 (fixed)
     b1_11:     11.72518 (fixed)
     b2_11:     12.56494 (fixed)
     bnz_11:    11.83364 (fixed)
@@ -30,4 +30,9 @@
     b2_00:     0 (fixed)
     bnz_00:    11.83364 (fixed)
 [[Correlations]] (unreported correlations are < 0.100)
-    C(tau_2, tau_1_hb) = -0.769
+    C(f1, f2)        = 4.529
+    C(tau_nz, f2)    = -1.800
+    C(tau_1, tau_nz) = -1.407
+    C(tau_1, f2)     = 0.356
+    C(tau_nz, f1)    = 0.344
+    C(tau_1, f1)     = 0.150

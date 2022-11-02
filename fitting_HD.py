@@ -26,6 +26,7 @@ MODELS_3_RES = (
 MODELS_4_RES = (
     "m_4res_f_cnz",
     "m_4res_2f",
+    "m_4res_3f",
 )
                          
 def make_exp_name(exp: str) -> str:
@@ -384,15 +385,19 @@ class FitterHD:
                 c_nz = calc_capacity_nz(self.composition['TEMPOL'])
                 params.add('c_nz', c_nz, min=c_nz, max = c_nz * 1e+3, vary=True)
             
-            if self.config["model"] in ("m_3res_f", "m_3res_2f", "m_3res_f_cnz", "m_4res_f_cnz", "m_4res_2f"):
+            if self.config["model"] in ("m_3res_f", "m_3res_2f", "m_3res_f_cnz", "m_4res_f_cnz", "m_4res_2f", "m_4res_3f"):
                 f1 = 0.1
                 params.add('f1', f1, min=0.01, max=0.4, vary=True)
             
-            if self.config["model"] in ("m_3res_2f", "m_4res_2f"):
+            if self.config["model"] in ("m_3res_2f", "m_4res_2f", "m_4res_3f"):
                 f2 = 0.1
                 params.add('f2', f2, min=0.01, max=0.4, vary=True)
                 
-            if self.config['model'] in ("m_4res_f_cnz", "m_4res_2f",):
+            if self.config["model"] in ("m_4res_3f",):
+                f3 = 0.1
+                params.add('f3', f3, min=0.01, max=0.4, vary=True)
+                
+            if self.config['model'] in ("m_4res_f_cnz", "m_4res_2f", "m_4res_3f"):
                 tau_1_hb = 0.1
                 params.add('tau_1_hb', tau_1_hb, min=tau_1_hb * 1e-1, max=tau_1_hb * 5e+2, vary=True)
             
@@ -590,10 +595,10 @@ if __name__ == '__main__':
     
     config = {
         'h2o_add': 10,     # ul per 100 ul sample
-        'conc_tempol': 60,  # mM
+        'conc_tempol': 50,  # mM
         
         # Set is_dt True if TEMPOL is deuterated
-        'is_dt': True,
+        'is_dt': False,
         
         # Set if only H11 and H01 data should be fitted
         # (as if one wouldn't have D data)
@@ -604,7 +609,7 @@ if __name__ == '__main__':
         
         # Set the model method
         # All model names start with m_
-        "model": "m_3res_f",
+        "model": "m_4res_3f",
 
         # SET FIT METHOD
         # 'leastsq' for a local fit
@@ -616,10 +621,10 @@ if __name__ == '__main__':
     
     # fitter.set_param_values(
     #     {
-    #         "tau_1": 13.3, 
-    #         "tau_2": 256,
-    #         "tau_nz": 4.5,
-    #         "f1": 0.09,
+    #         "tau_1": 6.7, 
+    #         "tau_2": 253,
+    #         "tau_nz": 5.01,
+    #         "c_nz": 9.47E38,
     #     }
     # )
     

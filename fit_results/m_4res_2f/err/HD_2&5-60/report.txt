@@ -1,33 +1,46 @@
 [[Fit Statistics]]
     # fitting method   = differential_evolution
-    # function evals   = 5277
+    # function evals   = 7544
     # data points      = 1040
     # variables        = 6
-    chi-square         = 2296.54349
-    reduced chi-square = 2.22102852
-    Akaike info crit   = 835.871828
-    Bayesian info crit = 865.553684
-##  Warning: uncertainties could not be estimated:
+    chi-square         = 2340.24228
+    reduced chi-square = 2.26329041
+    Akaike info crit   = 855.475099
+    Bayesian info crit = 885.156955
 [[Variables]]
-    b1_10:     16.66352 (fixed)
-    b2_10:     0 (fixed)
-    bnz_10:    17.85862 (fixed)
-    tau_1:     0.19173547 +/-        nan (nan%) (init = 12)
-    tau_2:     248.626870 +/- 0.97925675 (0.39%) (init = 380)
-    tau_nz:    4.28994083 +/- 0.01462121 (0.34%) (init = 7)
-    c_1:       2.386973e+39 (fixed)
-    c_2:       2.709461e+39 (fixed)
-    f1:        0.01655660 +/-        nan (nan%) (init = 0.1)
-    f2:        0.30916475 +/-        nan (nan%) (init = 0.1)
-    tau_1_hb:  13.4765690 +/-        nan (nan%) (init = 0.1)
     b1_00:     0 (fixed)
     b2_00:     0 (fixed)
     bnz_00:    17.85862 (fixed)
-    b1_11:     17.33887 (fixed)
-    b2_11:     19.12735 (fixed)
-    bnz_11:    17.85862 (fixed)
+    tau_1:     0.28229311 +/- 0.02028392 (7.19%) (init = 12)
+    tau_2:     247.898768 +/- 1.43074248 (0.58%) (init = 380)
+    tau_nz:    4.04508134 +/- 0.02675404 (0.66%) (init = 7)
+    c_1:       2.386973e+39 (fixed)
+    c_2:       2.709461e+39 (fixed)
+    f1:        0.02636993 +/- 9.7285e-04 (3.69%) (init = 0.1)
+    f2:        0.33226527 +/- 0.00224562 (0.68%) (init = 0.1)
+    tau_1_hb:  14.9899401 +/- 0.18233848 (1.22%) (init = 0.1)
     b1_01:     0 (fixed)
     b2_01:     18.30474 (fixed)
     bnz_01:    17.85862 (fixed)
+    b1_11:     17.33887 (fixed)
+    b2_11:     19.12735 (fixed)
+    bnz_11:    17.85862 (fixed)
+    b1_10:     16.66352 (fixed)
+    b2_10:     0 (fixed)
+    bnz_10:    17.85862 (fixed)
 [[Correlations]] (unreported correlations are < 0.100)
-    C(tau_2, tau_nz) = -0.328
+    C(f2, tau_1_hb)     = 1.304
+    C(tau_1, f2)        = -1.175
+    C(f1, f2)           = -1.016
+    C(tau_1, tau_1_hb)  = -0.922
+    C(tau_1, f1)        = 0.912
+    C(f1, tau_1_hb)     = -0.879
+    C(tau_nz, tau_1_hb) = 0.862
+    C(tau_1, tau_nz)    = -0.734
+    C(tau_2, f1)        = 0.414
+    C(tau_1, tau_2)     = 0.386
+    C(tau_nz, f2)       = 0.382
+    C(tau_2, tau_1_hb)  = -0.364
+    C(tau_nz, f1)       = -0.357
+    C(tau_2, tau_nz)    = 0.338
+    C(tau_2, f2)        = -0.222

@@ -1,35 +1,35 @@
 [[Fit Statistics]]
     # fitting method   = differential_evolution
-    # function evals   = 8420
+    # function evals   = 7801
     # data points      = 1048
     # variables        = 6
-    chi-square         = 3408.33565
-    reduced chi-square = 3.27095552
-    Akaike info crit   = 1247.94885
-    Bayesian info crit = 1277.67669
+    chi-square         = 3456.39537
+    reduced chi-square = 3.31707809
+    Akaike info crit   = 1262.62311
+    Bayesian info crit = 1292.35094
 ##  Warning: uncertainties could not be estimated:
 [[Variables]]
     b1_00:     0 (fixed)
     b2_00:     0 (fixed)
     bnz_00:    17.95713 (fixed)
-    tau_1:     1.35674123 +/-        nan (nan%) (init = 12)
-    tau_2:     233.663405 +/- 0.80564318 (0.34%) (init = 380)
-    tau_nz:    2.93810241 +/- 0.02411560 (0.82%) (init = 7)
+    tau_1:     3.04551709 +/- 0.01002739 (0.33%) (init = 12)
+    tau_2:     233.427935 +/- 0.75355283 (0.32%) (init = 380)
+    tau_nz:    0.58537281 +/-        nan (nan%) (init = 7)
     c_1:       1.864597e+39 (fixed)
     c_2:       2.742286e+39 (fixed)
-    f1:        0.02059130 +/-        nan (nan%) (init = 0.1)
-    f2:        0.18218381 +/-        nan (nan%) (init = 0.1)
-    tau_1_hb:  29.3780442 +/- 0.02005514 (0.07%) (init = 0.1)
-    b1_01:     0 (fixed)
-    b2_01:     18.1915 (fixed)
-    bnz_01:    17.95713 (fixed)
+    f1:        0.06498315 +/-        nan (nan%) (init = 0.1)
+    f2:        0.05292448 +/- 9.7950e-05 (0.19%) (init = 0.1)
+    tau_1_hb:  39.1868944 +/-        nan (nan%) (init = 0.1)
     b1_10:     17.00235 (fixed)
     b2_10:     0 (fixed)
     bnz_10:    17.95713 (fixed)
+    b1_01:     0 (fixed)
+    b2_01:     18.1915 (fixed)
+    bnz_01:    17.95713 (fixed)
     b1_11:     17.81699 (fixed)
     b2_11:     18.81769 (fixed)
     bnz_11:    17.95713 (fixed)
 [[Correlations]] (unreported correlations are < 0.100)
-    C(tau_nz, tau_1_hb) = 3.265
-    C(tau_2, tau_nz)    = -1.196
-    C(tau_2, tau_1_hb)  = 0.792
+    C(tau_2, f2)    = -2.324
+    C(tau_1, f2)    = 1.811
+    C(tau_1, tau_2) = 1.311

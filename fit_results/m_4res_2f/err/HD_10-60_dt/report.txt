@@ -1,41 +1,31 @@
 [[Fit Statistics]]
     # fitting method   = differential_evolution
-    # function evals   = 8353
+    # function evals   = 7364
     # data points      = 1048
     # variables        = 6
-    chi-square         = 2587.17716
-    reduced chi-square = 2.48289555
-    Akaike info crit   = 959.060618
-    Bayesian info crit = 988.788452
+    chi-square         = 2423.95514
+    reduced chi-square = 2.32625254
+    Akaike info crit   = 890.765791
+    Bayesian info crit = 920.493625
 ##  Warning: uncertainties could not be estimated:
 [[Variables]]
-    b1_00:     0 (fixed)
-    b2_00:     0 (fixed)
-    bnz_00:    19.30518 (fixed)
-    tau_1:     1.94720341 +/- 0.01699073 (0.87%) (init = 12)
-    tau_2:     234.484465 +/- 1.34717872 (0.57%) (init = 380)
-    tau_nz:    1.69903570 +/- 0.01936782 (1.14%) (init = 7)
-    c_1:       5.89528e+39 (fixed)
-    c_2:       2.567786e+39 (fixed)
-    f1:        0.03066013 +/-        nan (nan%) (init = 0.1)
-    f2:        0.11549441 +/- 6.6711e-04 (0.58%) (init = 0.1)
-    tau_1_hb:  4.59710266 +/- 0.05264236 (1.15%) (init = 0.1)
-    b1_01:     0 (fixed)
-    b2_01:     19.81654 (fixed)
-    bnz_01:    19.30518 (fixed)
-    b1_11:     18.56344 (fixed)
-    b2_11:     20.65491 (fixed)
-    bnz_11:    19.30518 (fixed)
     b1_10:     18.18584 (fixed)
     b2_10:     0 (fixed)
     bnz_10:    19.30518 (fixed)
-[[Correlations]] (unreported correlations are < 0.100)
-    C(f2, tau_1_hb)     = -1.050
-    C(tau_2, f2)        = -0.952
-    C(tau_1, f2)        = 0.928
-    C(tau_2, tau_nz)    = -0.904
-    C(tau_nz, f2)       = 0.721
-    C(tau_nz, tau_1_hb) = -0.651
-    C(tau_1, tau_2)     = 0.378
-    C(tau_2, tau_1_hb)  = 0.282
-    C(tau_1, tau_nz)    = -0.102
+    tau_1:     1.84786999 +/-        nan (nan%) (init = 12)
+    tau_2:     234.359823 +/-        nan (nan%) (init = 380)
+    tau_nz:    1.85439786 +/-        nan (nan%) (init = 7)
+    c_1:       5.89528e+39 (fixed)
+    c_2:       2.567786e+39 (fixed)
+    f1:        0.03213135 +/-        nan (nan%) (init = 0.1)
+    f2:        0.05543301 +/-        nan (nan%) (init = 0.1)
+    tau_1_hb:  4.61159261 +/-        nan (nan%) (init = 0.1)
+    b1_01:     0 (fixed)
+    b2_01:     19.81654 (fixed)
+    bnz_01:    19.30518 (fixed)
+    b1_00:     0 (fixed)
+    b2_00:     0 (fixed)
+    bnz_00:    19.30518 (fixed)
+    b1_11:     18.56344 (fixed)
+    b2_11:     20.65491 (fixed)
+    bnz_11:    19.30518 (fixed)
