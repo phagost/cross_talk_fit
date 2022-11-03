@@ -139,7 +139,7 @@ class FitterHD:
         self.config = config
         self.exps = {'11', '10', '01', '00'}
         self.nucs = {'H', 'D'}
-        self._prepare_fit()
+        self._prepare_fitter()
         self.is_fit_performed = False
         try:
             self.model = getattr(importlib.import_module("models"), config['model'])
@@ -406,7 +406,11 @@ class FitterHD:
             self.params[param_key].set(value=param_val)
         self.data_fitted = self.make_prediction(fitted=False)
     
-    def _prepare_fit(self):
+    def _prepare_fitter(self):
+        """Subroutine of init procedure to prepare the fit and emcee
+        What is mainly done:
+
+        """
         # --- FIT PREPARATION ---
         # Set sample composition
         self.composition = self._set_sample_composition()
@@ -522,7 +526,8 @@ class FitterHD:
         # Show plot if requested        
         if show_plot:
             plt.show()
-            
+        
+        self.is_fit_performed = True
         
         ### --- END OF REPORT AND PLOTTING ---
 
@@ -535,10 +540,22 @@ class FitterHD:
             save_report=False,
             show_walkers=False):
         
+        
+        if self.is_fit_performed:
+            params = self.result.params
+        else:
+            try:
+                params = Parameters()
+                load_path = os.path.join(self.finpath, "params.json")
+                params.load(open(load_path, "r"))
+            except:
+                print("You didn't perform fit yet with the given parameters")
+                raise
+        
         print('--------------------------------------------')
         print('accounting for statistics')
         res = minimize(self.my_residual, method='emcee', nan_policy='omit', burn=30, steps=steps, thin=20,
-                        params=self.result.params, args=(self.data,), progress=progress)
+                        params=params, args=(self.data,), progress=progress)
         
         if report:
             print('median of posterior probability distribution')
@@ -595,7 +612,7 @@ if __name__ == '__main__':
     
     config = {
         'h2o_add': 10,     # ul per 100 ul sample
-        'conc_tempol': 50,  # mM
+        'conc_tempol': 60,  # mM
         
         # Set is_dt True if TEMPOL is deuterated
         'is_dt': False,
@@ -609,7 +626,7 @@ if __name__ == '__main__':
         
         # Set the model method
         # All model names start with m_
-        "model": "m_4res_3f",
+        "model": "m_4res_2f",
 
         # SET FIT METHOD
         # 'leastsq' for a local fit
@@ -628,16 +645,16 @@ if __name__ == '__main__':
     #     }
     # )
     
-    fitter.make_fit(show_plot=False,
-                save_plot=True,
-                print_report=True,
-                save_report=True,
-                sample_rate=1)
-
-    # fitter.emcee(steps=1000,
-    #             progress=True,
-    #             plot=False,
+    # fitter.make_fit(show_plot=False,
     #             save_plot=True,
-    #             report=False,
-    #             save_report=True)
+    #             print_report=True,
+    #             save_report=True,
+    #             sample_rate=1)
+
+    fitter.emcee(steps=1000,
+                progress=True,
+                plot=False,
+                save_plot=True,
+                report=False,
+                save_report=True)
     
