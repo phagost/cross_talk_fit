@@ -1,0 +1,30 @@
+[[Fit Statistics]]
+    # fitting method   = differential_evolution
+    # function evals   = 1855
+    # data points      = 1048
+    # variables        = 4
+    chi-square         = 13833.8300
+    reduced chi-square = 13.2507951
+    Akaike info crit   = 2712.08467
+    Bayesian info crit = 2731.90322
+##  Warning: uncertainties could not be estimated:
+[[Variables]]
+    b1_00:   0 (fixed)
+    b2_00:   0 (fixed)
+    bnz_00:  22.12373 (fixed)
+    tau_1:   9.73054600 +/-        nan (nan%) (init = 12)
+    tau_2:   338.435171 +/-        nan (nan%) (init = 380)
+    tau_nz:  5.44629488 +/- 0.04598190 (0.84%) (init = 7)
+    c_1:     6.330594e+39 (fixed)
+    c_2:     2.534961e+39 (fixed)
+    c_nz:    6.023819e+37 (fixed)
+    f1:      0.10888961 +/-        nan (nan%) (init = 0.1)
+    b1_11:   21.79385 (fixed)
+    b2_11:   23.73775 (fixed)
+    bnz_11:  22.12373 (fixed)
+    b1_10:   20.62914 (fixed)
+    b2_10:   0 (fixed)
+    bnz_10:  22.12373 (fixed)
+    b1_01:   0 (fixed)
+    b2_01:   22.33417 (fixed)
+    bnz_01:  22.12373 (fixed)

@@ -136,9 +136,10 @@ def calc_capacity_zeeman_D(vol_add_d2o: float, conc_tempol: float=0, info: bool=
                                 I = 1,
                                 nuclei='2H')
     
-def calc_capacity_nz(conc_tempol, delta=5.25e-3, B=6.7):
+def calc_capacity_nz(conc_tempol, delta=3.06*5.25e-3, B=6.7):
     """Estimate heat capacity of the nz reservoir as dipolar reservoir.
     The approximate value for TEMPOL was taken from here 10.1103/PhysRevB.74.134418.
+    The 3.06 correction correpsond to the fact, that our linewidth should be about 450 MHz
 
     Args:
         conc_tempol (float): TEMPOL concentration in mM

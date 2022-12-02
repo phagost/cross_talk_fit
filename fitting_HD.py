@@ -26,6 +26,7 @@ MODELS_3_RES = (
 MODELS_4_RES = (
     "m_4res_f_cnz",
     "m_4res_2f",
+    "m_4res_2f_cnz",
     "m_4res_3f",
 )
                          
@@ -381,15 +382,18 @@ class FitterHD:
                 c_2 = calc_capacity_zeeman_D(self.composition['d2o'])
             params.add('c_2', c_2, min=c_2 * 1e-1, max = c_2 * 10, vary=False)
             
-            if self.config['model'] in ("m_3res", "m_3res_f_cnz", "m_4res_f_cnz"):
+            if self.config['model'] in ("m_3res", "m_3res_f_cnz", "m_4res_f_cnz", "m_4res_2f_cnz"):
                 c_nz = calc_capacity_nz(self.composition['TEMPOL'])
-                params.add('c_nz', c_nz, min=c_nz, max = c_nz * 1e+3, vary=True)
+                if self.config['model'] in ("m_3res",):
+                    params.add('c_nz', c_nz, min=c_nz, max = c_nz * 1e+3, vary=True)
+                if self.config['model'] in ("m_3res_f_cnz", "m_4res_f_cnz", "m_4res_2f_cnz"):
+                    params.add('c_nz', c_nz, min=c_nz, max = c_nz * 1e+3, vary=False)
             
-            if self.config["model"] in ("m_3res_f", "m_3res_2f", "m_3res_f_cnz", "m_4res_f_cnz", "m_4res_2f", "m_4res_3f"):
+            if self.config["model"] in ("m_3res_f", "m_3res_2f", "m_3res_f_cnz", "m_4res_f_cnz", "m_4res_2f", "m_4res_3f", "m_4res_2f_cnz"):
                 f1 = 0.1
                 params.add('f1', f1, min=0.01, max=0.4, vary=True)
             
-            if self.config["model"] in ("m_3res_2f", "m_4res_2f", "m_4res_3f"):
+            if self.config["model"] in ("m_3res_2f", "m_4res_2f", "m_4res_3f", "m_4res_2f_cnz"):
                 f2 = 0.1
                 params.add('f2', f2, min=0.01, max=0.4, vary=True)
                 
@@ -397,7 +401,7 @@ class FitterHD:
                 f3 = 0.1
                 params.add('f3', f3, min=0.01, max=0.4, vary=True)
                 
-            if self.config['model'] in ("m_4res_f_cnz", "m_4res_2f", "m_4res_3f"):
+            if self.config['model'] in ("m_4res_f_cnz", "m_4res_2f", "m_4res_3f", "m_4res_2f_cnz"):
                 tau_1_hb = 0.1
                 params.add('tau_1_hb', tau_1_hb, min=tau_1_hb * 1e-1, max=tau_1_hb * 5e+2, vary=True)
             
@@ -577,17 +581,17 @@ class FitterHD:
         if plot or save_plot:
             import corner
             
-            fit_vals = [
-                res.params.valuesdict()['tau_1'],
-                res.params.valuesdict()['tau_2'],
-                res.params.valuesdict()['tau_nz'],
-                res.params.valuesdict()['c_nz']
-            ]
+            # fit_vals = [
+            #     res.params.valuesdict()['tau_1'],
+            #     res.params.valuesdict()['tau_2'],
+            #     res.params.valuesdict()['tau_nz'],
+            #     res.params.valuesdict()['c_nz']
+            # ]
 
             fig = corner.corner(res.flatchain, 
                         labels=res.var_names,
                         show_titles=False,
-                        truths=fit_vals,
+                        # truths=fit_vals,
                         use_math_text=True)
             
             fig.set_tight_layout(True)
@@ -607,9 +611,39 @@ class FitterHD:
             
             fig.savefig(filepath_pdf, bbox_inches='tight')
             fig.savefig(filepath_png, bbox_inches='tight')
-
-if __name__ == '__main__':
+            
+def calc_everything(model_name="m_3res", given_config=None, fit=True, emcee=False):
+    h2o_tempol_list = [
+        (2.5, 60),
+        (10, 50),
+        (10, 60),
+        (10, 70),
+        (10, 80),
+        (17.5, 60),
+        (25, 60)
+    ]
+    dt_list = [True, False]
     
+    if given_config:
+        fitter = FitterHD(config)
+        
+        if fit:
+            fitter.make_fit(show_plot=False,
+                save_plot=True,
+                print_report=True,
+                save_report=True,
+                sample_rate=1)
+        
+        if emcee:
+            fitter.emcee(steps=1000,
+                progress=True,
+                plot=False,
+                save_plot=True,
+                report=False,
+                save_report=True)
+        
+        return
+        
     config = {
         'h2o_add': 10,     # ul per 100 ul sample
         'conc_tempol': 60,  # mM
@@ -626,7 +660,59 @@ if __name__ == '__main__':
         
         # Set the model method
         # All model names start with m_
-        "model": "m_4res_2f",
+        "model": model_name,
+
+        # SET FIT METHOD
+        # 'leastsq' for a local fit
+        # 'differential_evolution' for a global fit
+        'fit_method': 'differential_evolution'
+    }
+    
+    for h2o, tempol in h2o_tempol_list:
+        for dt in dt_list:
+            config['h2o_add'] = h2o
+            config['conc_tempol'] = tempol
+            config['is_dt'] = dt
+            
+            fitter = FitterHD(config)
+    
+            if fit:
+                fitter.make_fit(show_plot=False,
+                    save_plot=True,
+                    print_report=True,
+                    save_report=True,
+                    sample_rate=1)
+            
+            if emcee:
+                fitter.emcee(steps=300,
+                    progress=True,
+                    plot=False,
+                    save_plot=True,
+                    report=False,
+                    save_report=True)
+                        
+
+if __name__ == '__main__':
+    
+    # calc_everything(model_name = "m_4res_2f_cnz", fit=False, emcee=True)
+    
+    config = {
+        'h2o_add': 25,     # ul per 100 ul sample
+        'conc_tempol': 60,  # mM
+        
+        # Set is_dt True if TEMPOL is deuterated
+        'is_dt': False,
+        
+        # Set if only H11 and H01 data should be fitted
+        # (as if one wouldn't have D data)
+        'only_H': False,
+        
+        # Set True to account for the errors
+        'with_errors': True,
+        
+        # Set the model method
+        # All model names start with m_
+        "model": "m_4res_2f_cnz",
 
         # SET FIT METHOD
         # 'leastsq' for a local fit
@@ -651,7 +737,7 @@ if __name__ == '__main__':
     #             save_report=True,
     #             sample_rate=1)
 
-    fitter.emcee(steps=1000,
+    fitter.emcee(steps=300,
                 progress=True,
                 plot=False,
                 save_plot=True,
