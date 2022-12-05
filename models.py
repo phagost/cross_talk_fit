@@ -627,7 +627,7 @@ def m_3res_2hid(b, t, params):
     ))
     return db_dt
 
-def m_4res(b, t, params):
+def m_4res_X(b, t, params):
     """
     Defines the differential equations for the 2 coupled 
     zeeman reservoirs
@@ -666,6 +666,56 @@ def m_4res(b, t, params):
         - (c_1/c_nz) * k_1 * (b_nz-b_1) 
         - (c_2/c_nz) * k_2 * (b_nz-b_2)
         - (c_3/c_nz) * k_3 * (b_nz-b_3)
+        - k_nz * (b_nz-b_lab),  # db_nzdt for non-zeeman reservoir
+    ))
+    return db_dt
+
+
+def m_3res_f_cnz_X(b, t, params):
+    """
+    Defines the differential equations for the 2 coupled 
+    zeeman reservoirs
+
+    Arguments:
+        b :  vector of the state variables:
+                  b = [b_1, b_2, b_nz]
+        t :  time
+        params :  vector of the parameters:
+                  params = [tau_1, tau_2, tau_nz,
+                            c_1, c_2, c_nz]
+    """
+    
+    # Set initial conditions
+    b_1, b_2, b_3, b_nz = b
+    
+    # Set initial values
+    k_1 = 1 / params['tau_1']
+    k_2 = 1 / params['tau_2']
+    k_3 = 1 / params['tau_3']
+    k_nz = 1 / params['tau_nz']
+    c_1 = params['c_1']
+    c_2 = params['c_2']
+    c_3 = params['c_3']
+    c_nz = params['c_nz']
+    f = params['f1']
+    
+    c_1 = c_1 * (1 - f)
+    c_nz = c_nz + f * c_1
+    
+    # Setting the fraction of hidden spins
+    # if f = 0, the model is idential to two spin reservoir model
+    
+    # The invese temperature of the reservoir
+    b_lab = 1 / 4.09 
+    
+    # Create db_dt = (b_1', b_2', b_nz'):
+    db_dt = np.array((
+        - k_1 * (b_1-b_nz),      # db_1dt for the first zeeman reservoir
+        - k_2 * (b_2-b_nz),      # db_2dt for the second zeeman reservoir
+        - k_3 * (b_3-b_nz),      # db_3dt for the third zeeman reservoir
+        - (c_1/c_nz) * k_1 * (b_nz - b_1) 
+        - (c_2/c_nz) * k_2 * (b_nz - b_2)
+        - (c_3/c_nz) * k_3 * (b_nz - b_3)
         - k_nz * (b_nz-b_lab),  # db_nzdt for non-zeeman reservoir
     ))
     return db_dt

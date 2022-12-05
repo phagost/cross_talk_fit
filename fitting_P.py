@@ -3,7 +3,7 @@ Progam to fit the generated noisy data for Solomon equations with
 the different time sampling intervals
 '''
 
-from models import model_4res
+from models import m_3res_f_cnz_X
 
 from data import read_data
 from capacity import calc_capacity_zeeman_H,\
@@ -12,6 +12,7 @@ from capacity import calc_capacity_zeeman_H,\
                          
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
+import matplotlib
 import numpy as np
 
 import os
@@ -29,7 +30,7 @@ def solution(time, M, params):
     """
     abserr = 1.0e-8
     relerr = 1.0e-6
-    sol = odeint(model_4res, M, time, args=(params,),
+    sol = odeint(m_3res_f_cnz_X, M, time, args=(params,),
               atol=abserr, rtol=relerr)
     return sol
 
@@ -63,8 +64,10 @@ def residual(params, data, exps):
         sol[f'{exp}'] = solution(data[f'P{exp}']['time'], M, params)[:, 2]
     
     # Concatenate the result for several fits
-    res = np.concatenate(( (sol['1'] - data['P1']['data']) / data['P1']['err'], 
-                           (sol['0'] - data['P0']['data']) / data['P0']['err']))
+    res = np.concatenate((
+        (sol['1'] - data['P1']['data']) / data['P1']['err'], 
+        (sol['0'] - data['P0']['data']) / data['P0']['err']
+        ))
             
     fin = res.flatten()
     return fin
@@ -91,7 +94,7 @@ def plot_exp(data, data_fitted,
     
     ax[num].set_xlabel('time / sec')
     if num == 0:
-        ax[num].set_ylabel(r'T$^{-1}$ / K$^{-1}$')
+        ax[num].set_ylabel(r'$\beta$ / K$^{-1}$')
     ax[num].title.set_text(make_exp_name(exp))
     ax[num].legend()
     
@@ -101,7 +104,7 @@ def plot_exp(data, data_fitted,
     
 def _save_report(result, finpath):
     report = fit_report(result)
-    filepath = os.path.join(finpath, 'report.txt')
+    filepath = os.path.join(finpath, 'report_X.txt')
     with open(filepath, "w") as f:
         f.write(report)
     
@@ -109,76 +112,100 @@ def _save_report(result, finpath):
     result.params.dump(open(filepath, 'w'), indent=4)
 
 class FitterX:
-    def __init__(self, config):
+    def __init__(self, config, load_params=True):
         self.config = config
         self.exps = {'1', '0'}
         self.nucs = {'P'}
         self.is_fit_performed = False
         
+        # --- FIT PREPARATION ---
+        # Set sample composition
+        self.composition = self._set_sample_composition()
+        # Set experimental name
+        self.exp_name = self._gen_exp_name()
+        # Read data
+        self.data = read_data(self.exp_name, errors=self.config['with_errors'])
+        # Make finpath where all data will be saved
+        self.finpath = self._gen_finpath()
+        # --- END OF FIT PREPARATION ---
+        
+        # --- FIT ---
+        # Set initial conditions
+        self.init_cond = self._get_init_cond()
+        
+        # Define the parameters that are going to be optimized
+        self.params = Parameters()
+        self._set_params(load_params=load_params)
+        
     def my_residual(self, params, data):
         return residual(params, data, exps=self.exps)
     
     
-    def _set_params(self, params, load_params=True):
+    def _set_params(self, load_params=True):
         # Set parameters specfic for HD DNP juice
         if load_params:
-            self._set_loaded_parameters(params)
+            self._set_loaded_parameters()
         else:
-            self._set_manual_parameters(params)
+            self._set_manual_parameters()
 
         # Set parameters specific for P experiments
         # ---
         # P experiment initial conditions
         for exp in self.exps:
-            params.add(f'b1_{exp}', self.init_cond[f'NZ'], vary=False)
-            params.add(f'b2_{exp}', self.init_cond[f'NZ'], vary=False)
-            params.add(f'b3_{exp}', self.init_cond[f'P{exp}'], vary=False)
-            params.add(f'bnz_{exp}', self.init_cond['NZ'], vary=False)
+            self.params.add(f'b1_{exp}', self.init_cond[f'NZ'], vary=False)
+            self.params.add(f'b2_{exp}', self.init_cond[f'NZ'], vary=False)
+            self.params.add(f'b3_{exp}', self.init_cond[f'P{exp}'], vary=False)
+            self.params.add(f'bnz_{exp}', self.init_cond['NZ'], vary=False)
         
         # P experiments kinetic parameters
         tau_3 = 1000
-        params.add('tau_3', tau_3, min=10, max=3000, vary=True)
+        self.params.add('tau_3', tau_3, min=10, max=3000, vary=True)
         
         c_3 = calc_capacity_zeeman_P(self.composition['k2hpo4'])
-        params.add('c_3', c_3, vary=False)
+        self.params.add('c_3', c_3, vary=False)
     
-    def _set_loaded_parameters(self, params):
+    def _set_loaded_parameters(self):
         
-        params.load(
+        self.params.load(
             open(os.path.join(self.finpath.replace('P', 'HD'), 'params.json'), 'r')
         )
         
         HD_exps = ('11', '10', '01', '00')
         for exp in HD_exps:
-            del params[f'b1_{exp}']
-            del params[f'b2_{exp}']
-            del params[f'bnz_{exp}']
+            del self.params[f'b1_{exp}']
+            del self.params[f'b2_{exp}']
+            del self.params[f'bnz_{exp}']
         
-        params['tau_1'].vary = False
-        params['tau_2'].vary = False
-        params['tau_nz'].vary = False
-        params['c_nz'].vary = False
+        self.params['tau_1'].vary = False
+        self.params['tau_2'].vary = False
+        self.params['tau_nz'].vary = False
+        self.params['f1'].vary = False
+        self.params['c_nz'].vary = False
+    
+    def set_par(self, param_key, value, vary=False):
+        self.params[param_key].set(value=value)
+        self.params[param_key].set(vary=vary)
         
-    def _set_manual_parameters(self, params):
+    def _set_manual_parameters(self):
         # SET TIME CONSTANTS
         tau_1 = 4.77464535
-        params.add('tau_1', tau_1, min=0.1, max=200, vary=False)
+        self.params.add('tau_1', tau_1, min=0.1, max=200, vary=False)
         
         tau_2 = 248.794421
-        params.add('tau_2', tau_2, min=10, max=2000, vary=False)
+        self.params.add('tau_2', tau_2, min=10, max=2000, vary=False)
         
         tau_nz = 4.39540880
-        params.add('tau_nz', tau_nz, min=5e-3, max=1e+2, vary=False)
+        self.params.add('tau_nz', tau_nz, min=5e-3, max=1e+2, vary=False)
         
         # SET HEAT CAPACITIES
         c_1 = calc_capacity_zeeman_H(self.composition['h2o'], self.composition['TEMPOL'])
-        params.add('c_1', c_1, vary=False)
+        self.params.add('c_1', c_1, vary=False)
         
         c_2 = calc_capacity_zeeman_D(self.composition['d2o'])
-        params.add('c_2', c_2, vary=False)
+        self.params.add('c_2', c_2, vary=False)
         
         c_nz = 7.6386e+38
-        params.add('c_nz', c_nz, vary=False)
+        self.params.add('c_nz', c_nz, vary=False)
     
     def _get_init_cond(self):
         init_cond = {
@@ -235,14 +262,25 @@ class FitterX:
             str: the final pathname where all results will be stored 
         """
         start_dir = os.getcwd()
-        finpath = os.path.join(start_dir, 'fit_results', self.exp_name)
+        
+        expname =  self.exp_name
+        err_name = "err" if self.config["with_errors"] else "noerr"
+        finpath = os.path.join(start_dir, 'fit_results', self.config["model"], 
+                               err_name, expname)
         
         if not os.path.isdir(finpath):
-            os.mkdir(finpath)
+            os.makedirs(finpath, exist_ok=True)
             
         return finpath
     
     def _make_plot(self, data_fitted):
+        
+        font = {'family' : 'Helvetica',
+                'size'   : 18}
+
+        matplotlib.rc('font', **font)
+
+        # plt.rc('font', family='Helvetica')
         fig, ax = plt.subplots(1, 2)
             
         for exp in self.exps:
@@ -260,26 +298,7 @@ class FitterX:
                  print_report=True, 
                  save_report=True):
         
-        # --- FIT PREPARATION ---
-        # Set sample composition
-        self.composition = self._set_sample_composition()
-        # Set experimental name
-        self.exp_name = self._gen_exp_name()
-        # Read data
-        self.data = read_data(self.exp_name, errors=self.config['with_errors'])
-        # Make finpath where all data will be saved
-        self.finpath = self._gen_finpath()
-        # --- END OF FIT PREPARATION ---
-        
-        # --- FIT ---
-        # Set initial conditions
-        self.init_cond = self._get_init_cond()
-        
-        # Define the parameters that are going to be optimized
-        params = Parameters()
-        self._set_params(params, load_params=load_params)
-        
-        self.result = minimize(self.my_residual, params, args=(self.data,), 
+        self.result = minimize(self.my_residual, self.params, args=(self.data,), 
                                method=self.config['fit_method'])
         
         # Calculate data with the result of the best fit
@@ -321,23 +340,29 @@ if __name__ == '__main__':
     
     config = {
         'h2o_add': 10,      # ul per 100 ul sample
-        'conc_tempol': 60,  # mM
+        'conc_tempol': 70,  # mM
         'k2hpo4': 0.5,      # M
         
         # Set True to account for the errors
         'with_errors': True,
         
+        # Set the model method
+        # All model names start with m_
+        "model": "m_3res_f_cnz",
+        
         # SET FIT METHOD
         # 'leastsq' for a local fit
         # 'differential_evolution' for a global fit
-        'fit_method': 'differential_evolution'
+        # 'fit_method': 'differential_evolution'
+        'fit_method': 'leastsq'
     }
     
     fitter = FitterX(config)
     
-    fitter.make_fit(load_params=True,
-                    show_plot=True,
-                    save_plot=False,
+    fitter.set_par('tau_3', value=877.0, vary=True)
+    
+    fitter.make_fit(show_plot=True,
+                    save_plot=True,
                     print_report=True,
-                    save_report=False)
+                    save_report=True)
     
